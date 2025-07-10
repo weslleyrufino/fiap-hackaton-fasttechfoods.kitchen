@@ -1,0 +1,16 @@
+global:
+  scrape_interval: 10s
+
+scrape_configs:
+    # Job para monitorar o Prometheus
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']  # Porta padrão onde o Prometheus está escutando    
+
+  - job_name: 'myapp'
+    static_configs:
+      - targets: ['host.docker.internal:5246']  # Host da minha API. 
+      
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']

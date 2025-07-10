@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: producer-config
+  labels:
+    app: producer
+data:
+  MassTransit__Servidor: rabbitmq
+  MassTransit__Usuario: guest
+  MassTransit__Senha: guest
+  Logging__LogLevel__Default: Information
