@@ -22,10 +22,10 @@ jobs:
         dotnet-version: 8.0.x
         
     - name: Restore dependencies
-      run: dotnet restore GestorContatos.API/GestorContatos.API.sln
+      run: dotnet restore FastTechFoods.Kitchen.API/FastTechFoods.Kitchen.API.sln
       
     - name: Build
-      run: dotnet build --no-restore GestorContatos.API/GestorContatos.API.sln
+      run: dotnet build --no-restore FastTechFoods.Kitchen.API/FastTechFoods.Kitchen.API.sln
 
   unit-tests:
     runs-on: ubuntu-latest
@@ -38,10 +38,10 @@ jobs:
         dotnet-version: 8.0.x
         
     - name: Restore dependencies
-      run: dotnet restore GestorContatos.API/GestorContatos.API.sln
+      run: dotnet restore FastTechFoods.Kitchen.API/FastTechFoods.Kitchen.API.sln
       
     - name: Unit Tests
-      run: dotnet test --no-restore GestorContatos.API/GestorContatos.API.sln --filter Category=Unit
+      run: dotnet test --no-restore FastTechFoods.Kitchen.API/FastTechFoods.Kitchen.API.sln --filter Category=Unit
 
   integration-tests:
     runs-on: ubuntu-latest
@@ -54,8 +54,8 @@ jobs:
         dotnet-version: 8.0.x
         
     - name: Restore dependencies
-      run: dotnet restore GestorContatos.API/GestorContatos.API.sln
+      run: dotnet restore FastTechFoods.Kitchen.API/FastTechFoods.Kitchen.API.sln
       
     - name: Integration Tests
-      run: dotnet test --no-restore GestorContatos.API/GestorContatos.API.sln --filter Category=Integration
+      run: dotnet test --no-restore FastTechFoods.Kitchen.API/FastTechFoods.Kitchen.API.sln --filter Category=Integration
     
