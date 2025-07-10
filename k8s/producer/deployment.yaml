@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: producer
-        image: fiap-fase4-techchallenge-producer:latest
+        image: fiap-hackaton-fasttechfoods-kitchen:latest
         imagePullPolicy: Never
         ports:
         - containerPort: 8080

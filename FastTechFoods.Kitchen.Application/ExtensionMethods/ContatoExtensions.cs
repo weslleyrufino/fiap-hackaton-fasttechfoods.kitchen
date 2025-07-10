@@ -11,14 +11,14 @@ public static class ContatoExtensions
         {
             Id = viewModel.Id,
             Email = viewModel.Email,
-            Nome = viewModel.Nome,
+            Name = viewModel.Name,
             Telefone = viewModel.Telefone,
             RegiaoId = viewModel.RegiaoId,
             Regiao = new Regiao()
             {
                 Id = viewModel.Regiao.Id,
                 DDD = viewModel.Regiao.DDD,
-                Nome = viewModel.Regiao.Nome
+                Name = viewModel.Regiao.Name
             }
         };
     }
@@ -28,7 +28,7 @@ public static class ContatoExtensions
         return new Contato
         {
             Email = createViewModel.Email,
-            Nome = createViewModel.Nome,
+            Name = createViewModel.Nome,
             Telefone = createViewModel.Telefone,
             RegiaoId = createViewModel.RegiaoId
         };
@@ -40,7 +40,7 @@ public static class ContatoExtensions
         {
             Id = createViewModel.Id,
             Email = createViewModel.Email,
-            Nome = createViewModel.Nome,
+            Name = createViewModel.Nome,
             Telefone = createViewModel.Telefone,
             RegiaoId = createViewModel.RegiaoId
         };
@@ -52,14 +52,14 @@ public static class ContatoExtensions
         {
             Id = model.Id,
             Email = model.Email,
-            Nome = model.Nome,
+            Name = model.Name,
             Telefone = model.Telefone,
             RegiaoId = model.RegiaoId,
             Regiao = new RegiaoViewModel()
             {
                 Id = model.Regiao.Id,
                 DDD = model.Regiao.DDD,
-                Nome = model.Regiao.Nome
+                Name = model.Regiao.Name
             }
         };
     }

@@ -3,7 +3,8 @@ using FastTechFoods.Kitchen.Application.Interfaces.Repository;
 using FastTechFoods.Kitchen.Application.Interfaces.Services;
 using FastTechFoods.Kitchen.Application.Services;
 using FastTechFoods.Kitchen.Infrastructure.Repository;
-using MassTransit;
+using FastTechFoods.Kitchen.Infrastructure.IoC;
+//using MassTransit;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
@@ -20,8 +21,10 @@ var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
     .Build();
 
-builder.Services.AddScoped<IContatoRepository, ContatoRepository>();
-builder.Services.AddScoped<IContatoService, ContatoService>();
+builder.Services.AddScoped<IContatoRepository, ContatoRepository>(); // TODO: DELETE
+builder.Services.AddScoped<IContatoService, ContatoService>(); // TODO: DELETE
+
+builder.Services.AddScoped<IMenuItemService, MenuItemService>();
 
 // Add services to the container.
 
@@ -31,25 +34,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 
-var configurationMassTransit = builder.Configuration;
-var fila = configurationMassTransit.GetSection("MassTransit")["NomeFila"] ?? string.Empty;
-var servidor = configurationMassTransit.GetSection("MassTransit")["Servidor"] ?? string.Empty;
-var usuario = configurationMassTransit.GetSection("MassTransit")["Usuario"] ?? string.Empty;
-var senha = configurationMassTransit.GetSection("MassTransit")["Senha"] ?? string.Empty;
 
-builder.Services.AddMassTransit(x =>
-{
-    x.UsingRabbitMq((context, cfg) =>
-    {
-        cfg.Host(new Uri("rabbitmq://rabbitmq:5672"), h =>
-        {
-            h.Username(usuario);
-            h.Password(senha);
-        });
-
-        cfg.ConfigureEndpoints(context);
-    });
-});
+builder.Services.AddMassTransitConfigured(builder.Configuration);
 
 // LOG
 builder.Logging.ClearProviders();
@@ -133,7 +119,7 @@ app.UseExceptionHandler(errorApp =>
 
         if (exceptionHandlerPathFeature?.Error != null)
         {
-            logger.LogError(exceptionHandlerPathFeature.Error, "Erro n�o tratado.");
+            logger.LogError(exceptionHandlerPathFeature.Error, "Erro não tratado.");
         }
 
         await context.Response.WriteAsync("{\"error\":\"Erro interno do servidor.\"}");

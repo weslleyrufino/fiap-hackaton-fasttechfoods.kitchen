@@ -3,13 +3,11 @@
 namespace FastTechFoods.Kitchen.Domain.Entities;
 public class Employee : EntityBase
 {
-    public string Name { get; set; }
-
     public string Email { get; set; }
 
     public string PasswordHash { get; set; }
 
-    public string Role { get; set; } // Ex: "Attendant", "Manager"
+    public string Role { get; set; }
 
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 }

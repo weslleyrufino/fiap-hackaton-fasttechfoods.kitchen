@@ -20,11 +20,11 @@ public class ContatoServiceTests
 
         _contatoFaker = new Faker<Contato>()
             .RuleFor(c => c.Id, f => f.IndexFaker + 1)
-            .RuleFor(c => c.Nome, f => f.Name.FullName())
+            .RuleFor(c => c.Name, f => f.Name.FullName())
             .RuleFor(c => c.Telefone, f => f.Phone.PhoneNumber("#########"))
             .RuleFor(c => c.Email, f => f.Internet.Email())
             .RuleFor(c => c.RegiaoId, f => f.Random.Int(1, 100))
-            .RuleFor(c => c.Regiao, f => new Regiao { Nome = f.Locale, DDD = f.Random.Int(11, 99) });
+            .RuleFor(c => c.Regiao, f => new Regiao { Name = f.Locale, DDD = f.Random.Int(11, 99) });
     }
 
     [Fact(DisplayName = "Retornar Lista de Contatos")]

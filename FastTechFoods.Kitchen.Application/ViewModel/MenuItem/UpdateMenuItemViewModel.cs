@@ -1,12 +1,9 @@
 ﻿using FastTechFoods.Kitchen.Application.ViewModel.Base;
 using System.ComponentModel.DataAnnotations;
 
-namespace FastTechFoods.Kitchen.Application.ViewModel;
+namespace FastTechFoods.Kitchen.Application.ViewModel.MenuItem;
 public class UpdateMenuItemViewModel : ViewModelBase
 {
-    [Required(ErrorMessage = "The name is required.")]
-    public string Name { get; set; }
-
     [Required(ErrorMessage = "The description is required.")]
     public string Description { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FastTechFoods.Kitchen.Application.ViewModel;
+namespace FastTechFoods.Kitchen.Application.ViewModel.MenuItem;
 public class CreateMenuItemViewModel
 {
     [Required(ErrorMessage = "The name is required.")]

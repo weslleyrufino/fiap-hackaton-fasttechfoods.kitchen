@@ -61,7 +61,7 @@ public class ContatoService(IContatoRepository contatoRepository) : IContatoServ
                 .Serialize(
                 new Contato(){
                     Id = contato.Id, 
-                    Nome = contato.Nome, 
+                    Name = contato.Name, 
                     Telefone = contato.Telefone, 
                     Email = contato.Email, 
                     RegiaoId = contato.RegiaoId 
@@ -94,7 +94,7 @@ public class ContatoService(IContatoRepository contatoRepository) : IContatoServ
                 new Contato()
                 {
                     Id = contato.Id,
-                    Nome = contato.Nome,
+                    Name = contato.Name,
                     Telefone = contato.Telefone,
                     Email = contato.Email,
                     RegiaoId = contato.RegiaoId
