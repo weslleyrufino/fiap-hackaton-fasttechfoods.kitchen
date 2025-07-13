@@ -3,6 +3,7 @@
 namespace FastTechFoods.Kitchen.Domain.Entities;
 public class Employee : EntityBase
 {
+    public string Name { get; set; }
     public string Email { get; set; }
 
     public string PasswordHash { get; set; }

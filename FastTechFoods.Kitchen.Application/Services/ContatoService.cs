@@ -10,7 +10,7 @@ public class ContatoService(IContatoRepository contatoRepository) : IContatoServ
 {
     private readonly IContatoRepository _contatoRepository = contatoRepository;
 
-    public void DeleteContato(int id)
+    public void DeleteContato(Guid id)
     {
         var factory = new ConnectionFactory() { HostName = "localhost", UserName = "guest", Password = "guest" };
         using var connection = factory.CreateConnection();
@@ -41,7 +41,7 @@ public class ContatoService(IContatoRepository contatoRepository) : IContatoServ
     public IEnumerable<Contato> GetContatosPorDDD(int ddd) 
         => _contatoRepository.GetContatosPorDDD(ddd);
 
-    public Contato ObterPorId(int id) 
+    public Contato ObterPorId(Guid id) 
         => _contatoRepository.ObterPorId(id);
 
     public void PostInserirContato(Contato contato)

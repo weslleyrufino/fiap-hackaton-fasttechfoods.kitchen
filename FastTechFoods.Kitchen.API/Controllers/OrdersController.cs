@@ -1,15 +1,17 @@
-﻿using FastTechFoods.Kitchen.Application.ViewModel.MenuItem;
-using Microsoft.AspNetCore.Http;
+﻿using FastTechFoods.Kitchen.Application.Interfaces.Services;
+using FastTechFoods.Kitchen.Application.ViewModel.Order;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoods.Kitchen.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class OrdersController : ControllerBase
+public class OrdersController(IOrderService orderService, ILogger<MenuItemController> logger) : ControllerBase
 {
+    private readonly IOrderService _orderService = orderService;
+    private readonly ILogger<MenuItemController> _logger = logger;
 
     [HttpGet]
-    public async Task<IActionResult> GetOrders([FromBody] CreateMenuItemViewModel menuItemViewModel)
+    public async Task<IActionResult> GetOrders([FromBody] OrderViewlModel orderViewModel)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
@@ -21,20 +23,19 @@ public class OrdersController : ControllerBase
         return Created();
     }
 
-    [HttpPut]
-    public async Task<IActionResult> PutUpdateOrders([FromBody] UpdateMenuItemViewModel menuItemViewModel)
+    [HttpPatch]
+    public async Task<IActionResult> PatchUpdateStatusOrders([FromBody] UpdateStatusOrderViewModel orderViewModel)
     {
 
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        //if (_contatoService.ObterPorId(contato.Id) is null)
-        //    return NotFound("Contato não existe");
+        //bool exists = await _orderService.ExistsAsync(orderViewModel.Id);
 
+        //if (!exists)
+        //    return NotFound("Order does not exist");
 
-        // TODO: Todos da cozinha pode acessar.
-
-        //await _menuItemService.UpdateMenuItemAsync(menuItemViewModel.ToModel());
+        await _orderService.UpdateOrderAsync(orderViewModel);
 
         return NoContent();
 

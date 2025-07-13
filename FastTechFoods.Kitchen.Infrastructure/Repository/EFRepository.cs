@@ -26,13 +26,13 @@ public class EFRepository<T> : IRepository<T> where T : EntityBase
         _context.SaveChanges();
     }
 
-    public void Deletar(int id)
+    public void Deletar(Guid id)
     {
         _dbSet.Remove(ObterPorId(id));
         _context.SaveChanges();
     }
 
-    public T ObterPorId(int id) 
+    public T ObterPorId(Guid id) 
         => _dbSet.FirstOrDefault(entity => entity.Id == id);
 
     public IList<T> ObterTodos()

@@ -1,13 +1,11 @@
 ﻿using FastTechFoods.Kitchen.Application.Validations;
+using FastTechFoods.Kitchen.Domain.Entities.Base;
 using System.ComponentModel.DataAnnotations;
 
 namespace FastTechFoods.Kitchen.Application.ViewModel;
 
-public class UpdateContatoViewModel
+public class UpdateContatoViewModel : EntityBase
 {
-    [Required(ErrorMessage = "O campo Id é obrigatório.")]
-    public int Id { get; set; }
-
     [Required(ErrorMessage = "O campo Nome é obrigatório.")]
     public string Nome { get; set; }
 

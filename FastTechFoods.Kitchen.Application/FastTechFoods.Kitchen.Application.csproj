@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <Folder Include="ViewModel\Employee\" />
-    <Folder Include="ViewModel\Order\" />
   </ItemGroup>
 
 </Project>

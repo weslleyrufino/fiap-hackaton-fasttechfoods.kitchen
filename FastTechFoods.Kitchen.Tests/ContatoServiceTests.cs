@@ -19,7 +19,7 @@ public class ContatoServiceTests
         _contatoService = new ContatoService(_mockContatoRepository.Object);
 
         _contatoFaker = new Faker<Contato>()
-            .RuleFor(c => c.Id, f => f.IndexFaker + 1)
+            //.RuleFor(c => c.Id, f => f.IndexFaker + 1)
             .RuleFor(c => c.Name, f => f.Name.FullName())
             .RuleFor(c => c.Telefone, f => f.Phone.PhoneNumber("#########"))
             .RuleFor(c => c.Email, f => f.Internet.Email())
