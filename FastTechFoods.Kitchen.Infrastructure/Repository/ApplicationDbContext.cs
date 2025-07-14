@@ -1,6 +1,5 @@
 ﻿using FastTechFoods.Kitchen.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 namespace FastTechFoods.Kitchen.Infrastructure.Repository;
 public class ApplicationDbContext : DbContext
@@ -20,6 +19,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Contato> Contato { get; set; }
     public DbSet<Order> Order { get; set; }
     public DbSet<OrderItem> OrderItem { get; set; }
+    public DbSet<MenuItem> MenuItem { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {

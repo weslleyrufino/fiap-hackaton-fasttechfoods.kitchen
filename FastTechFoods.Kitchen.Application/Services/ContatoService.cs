@@ -42,7 +42,7 @@ public class ContatoService(IContatoRepository contatoRepository) : IContatoServ
         => _contatoRepository.GetContatosPorDDD(ddd);
 
     public Contato ObterPorId(Guid id) 
-        => _contatoRepository.ObterPorId(id);
+        => _contatoRepository.GetById(id);
 
     public void PostInserirContato(Contato contato)
     {

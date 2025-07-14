@@ -36,7 +36,9 @@ public class MenuItemConfiguration : IEntityTypeConfiguration<MenuItem>
                .IsRequired();
 
         builder.Property(m => m.CreatedAt)
-               .HasColumnType("DATETIME")
-               .IsRequired();
+               .HasColumnType("DATETIME");
+
+        builder.Property(m => m.UpdatedAt)
+               .HasColumnType("DATETIME");
     }
 }

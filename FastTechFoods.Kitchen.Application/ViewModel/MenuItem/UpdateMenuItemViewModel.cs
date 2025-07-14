@@ -19,4 +19,4 @@ public class UpdateMenuItemViewModel : ViewModelBase
 
     [Required(ErrorMessage = "The availability status is required.")]
     public bool IsAvailable { get; set; }
-}
+ }

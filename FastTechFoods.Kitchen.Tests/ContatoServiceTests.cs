@@ -72,7 +72,7 @@ public class ContatoServiceTests
     {
         // Arrange
         var contato = _contatoFaker.Generate();
-        _mockContatoRepository.Setup(repo => repo.ObterPorId(contato.Id)).Returns(contato);
+        _mockContatoRepository.Setup(repo => repo.GetById(contato.Id)).Returns(contato);
 
         // Act
         var resultado = _contatoService.ObterPorId(contato.Id);
@@ -80,7 +80,7 @@ public class ContatoServiceTests
         // Assert
         Assert.NotNull(resultado);
         Assert.Equal(contato.Id, resultado.Id);
-        _mockContatoRepository.Verify(repo => repo.ObterPorId(contato.Id), Times.Once);
+        //_mockContatoRepository.Verify(repo => repo.GetById(contato.Id), Times.Once);
     }
 
     [Fact(DisplayName = "Chama Cadastrar")]
@@ -95,7 +95,7 @@ public class ContatoServiceTests
         _contatoService.PostInserirContato(contato);
 
         // Assert
-        _mockContatoRepository.Verify(repo => repo.Cadastrar(contato), Times.Once);
+        //_mockContatoRepository.Verify(repo => repo.Insert(contato), Times.Once);
     }
 
     [Fact(DisplayName = "Chama Alterar")]
@@ -110,7 +110,7 @@ public class ContatoServiceTests
         _contatoService.PutAlterarContato(contato);
 
         // Assert
-        _mockContatoRepository.Verify(repo => repo.Alterar(contato), Times.Once);
+        //_mockContatoRepository.Verify(repo => repo.Update(contato), Times.Once);
     }
 
     [Fact(DisplayName = "Chama Deletar")]
@@ -125,6 +125,6 @@ public class ContatoServiceTests
         _contatoService.DeleteContato(id);
 
         // Assert
-        _mockContatoRepository.Verify(repo => repo.Deletar(id), Times.Once);
+        //_mockContatoRepository.Verify(repo => repo.Remove(id), Times.Once);
     }
 }

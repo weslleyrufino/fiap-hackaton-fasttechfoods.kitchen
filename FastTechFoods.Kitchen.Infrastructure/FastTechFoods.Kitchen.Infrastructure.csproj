@@ -27,8 +27,4 @@
     <ProjectReference Include="..\FastTechFoods.Kitchen.Domain\FastTechFoods.Kitchen.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Querys\" />
-  </ItemGroup>
-
 </Project>

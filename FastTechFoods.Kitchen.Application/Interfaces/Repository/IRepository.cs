@@ -10,9 +10,13 @@ namespace FastTechFoods.Kitchen.Application.Interfaces.Repository;
 /// <typeparam name="T"></typeparam>
 public interface IRepository<T> where T : EntityBase 
 {
-    IList<T> ObterTodos();
-    T ObterPorId(Guid id);
-    void Cadastrar(T entidade);
-    void Alterar(T entidade);
-    void Deletar(Guid id);
+    T GetById(Guid id);
+  
+
+    Task<bool> ExistsAsync(Guid id);
+    Task<IList<T>> GetAllAsync();
+    Task<T?> GetByIdAsync(Guid id);
+    Task InsertAsync(T entidade);
+    Task UpdateAsync(T entidade);
+    Task RemoveAsync(Guid id);
 }

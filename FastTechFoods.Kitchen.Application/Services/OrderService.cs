@@ -13,11 +13,15 @@ public class OrderService(ISendEndpointProvider sendEndpointProvider, IConfigura
     private readonly IOrderRepository _orderRepository = orderRepository;
 
     public async Task<IEnumerable<OrderViewModel>> GetOrdersAsync()
-        => (await _orderRepository.GetOrdersAsync()).ToViewModel();
+    {
+        return (await _orderRepository.GetOrdersAsync()).ToViewModel();
+    }
 
 
     public async Task<bool> ExistsAsync(Guid id)
-        => await _orderRepository.ExistsAsync(id);
+    {
+        return await _orderRepository.ExistsAsync(id);
+    }
 
 
     public async Task UpdateOrderAsync(UpdateStatusOrderViewModel orderViewModel)

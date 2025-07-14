@@ -13,20 +13,18 @@ public static class MenuItemExtensions
             Description = createViewModel.Description,
             Price = createViewModel.Price,
             Category = createViewModel.Category,
-            IsAvailable = createViewModel.IsAvailable
+            IsAvailable = createViewModel.IsAvailable,
+            CreatedAt = DateTime.UtcNow
         };
     }
 
-    public static MenuItem ToModel(this UpdateMenuItemViewModel updateViewModel)
+    public static void UpdateFrom(this MenuItem entity, UpdateMenuItemViewModel viewModel)
     {
-        return new MenuItem
-        {
-            Id = updateViewModel.Id,
-            Name = updateViewModel.Name,
-            Description = updateViewModel.Description,
-            Price = updateViewModel.Price,
-            Category = updateViewModel.Category,
-            IsAvailable = updateViewModel.IsAvailable
-        };
+        entity.Name = viewModel.Name;
+        entity.Description = viewModel.Description;
+        entity.Price = viewModel.Price;
+        entity.Category = viewModel.Category;
+        entity.IsAvailable = viewModel.IsAvailable;
+        entity.UpdatedAt = DateTime.UtcNow;
     }
 }

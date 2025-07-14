@@ -1,5 +1,4 @@
-﻿using FastTechFoods.Kitchen.Application.ExtensionMethods;
-using FastTechFoods.Kitchen.Application.Interfaces.Services;
+﻿using FastTechFoods.Kitchen.Application.Interfaces.Services;
 using FastTechFoods.Kitchen.Application.ViewModel.MenuItem;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,7 +19,7 @@ public class MenuItemController(IMenuItemService menuItemService, ILogger<MenuIt
 
         // TODO: SOMENTE GERENTE PODE ACESSAR.
 
-        await _menuItemService.CreateMenuItemAsync(menuItemViewModel.ToModel());
+        await _menuItemService.CreateMenuItemAsync(menuItemViewModel);
 
         return Created();
     }
@@ -32,13 +31,15 @@ public class MenuItemController(IMenuItemService menuItemService, ILogger<MenuIt
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        //if (_contatoService.ObterPorId(contato.Id) is null)
-        //    return NotFound("Contato não existe");
+        var exists = await _menuItemService.ExistsAsync(menuItemViewModel.Id);
+
+        if (!exists)
+            return NotFound("Menu Item not found.");
 
 
         // TODO: SOMENTE GERENTE PODE ACESSAR.
 
-        await _menuItemService.UpdateMenuItemAsync(menuItemViewModel.ToModel());
+        await _menuItemService.UpdateMenuItemAsync(menuItemViewModel);
 
         return NoContent();
 
