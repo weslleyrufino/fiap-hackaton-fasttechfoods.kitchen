@@ -1,12 +1,12 @@
 ﻿using FastTechFoods.Kitchen.Application.ViewModel.Base;
-using FastTechFoods.Kitchen.Application.ViewModel.Order.Enum;
+using FastTechFoods.Kitchen.Domain.Entities.Enum;
 using System.ComponentModel.DataAnnotations;
 
 namespace FastTechFoods.Kitchen.Application.ViewModel.Order;
-public class OrderViewlModel : ViewModelBase
+public class OrderViewModel : ViewModelBase
 {
     [Required(ErrorMessage = "The customer ID is required.")]
-    public Guid CustomerId { get; set; } // Ou CPF, se usar autenticação via CPF
+    public string CustomerId { get; set; } // string pois pode ser CPF ou email.
 
     [Required(ErrorMessage = "The order date is required.")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
@@ -17,11 +17,12 @@ public class OrderViewlModel : ViewModelBase
     [Required(ErrorMessage = "The delivery method is required.")]
     public string DeliveryMethod { get; set; } // Ex: "Counter", "DriveThru", "Delivery"
 
+
     /// <summary>
     /// Only Rejected or Canceled
     /// </summary>
-    public EnumStatus? CancellationReason { get; set; }
+    public string? CancellationReason { get; set; }
 
     [Required]
-    public List<OrderItem> Items { get; set; } = new();
+    public List<OrderItemViewModel> Items { get; set; } = new();
 }

@@ -11,29 +11,31 @@ public class OrdersController(IOrderService orderService, ILogger<MenuItemContro
     private readonly ILogger<MenuItemController> _logger = logger;
 
     [HttpGet]
-    public async Task<IActionResult> GetOrders([FromBody] OrderViewlModel orderViewModel)
+    public async Task<IActionResult> GetOrders()
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        // TODO: Todos da cozinha pode acessar.
+        // TODO: Permissão. Todos da cozinha podem acessar.
 
-        //await _menuItemService.CreateMenuItemAsync(menuItemViewModel.ToModel());
+        var result = await _orderService.GetOrdersAsync();
 
-        return Created();
+        return Ok(result);
     }
 
     [HttpPatch]
     public async Task<IActionResult> PatchUpdateStatusOrders([FromBody] UpdateStatusOrderViewModel orderViewModel)
     {
 
+        // TODO: Permissão. Todos da cozinha podem acessar.
+
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
 
-        //bool exists = await _orderService.ExistsAsync(orderViewModel.Id);
+        bool exists = await _orderService.ExistsAsync(orderViewModel.Id);
 
-        //if (!exists)
-        //    return NotFound("Order does not exist");
+        if (!exists)
+            return NotFound("Order does not exist");
 
         await _orderService.UpdateOrderAsync(orderViewModel);
 

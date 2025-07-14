@@ -1,46 +1,40 @@
-﻿using FastTechFoods.Kitchen.Application.Interfaces.Services;
+﻿using FastTechFoods.Kitchen.Application.ExtensionMethods;
+using FastTechFoods.Kitchen.Application.Interfaces.Repository;
+using FastTechFoods.Kitchen.Application.Interfaces.Services;
 using FastTechFoods.Kitchen.Application.ViewModel.Order;
-using FastTechFoods.Kitchen.Domain.Entities;
 using MassTransit;
 using Microsoft.Extensions.Configuration;
 
 namespace FastTechFoods.Kitchen.Application.Services;
-public class OrderService : IOrderService
+public class OrderService(ISendEndpointProvider sendEndpointProvider, IConfiguration configuration, IOrderRepository orderRepository) : IOrderService
 {
-    private readonly ISendEndpointProvider _sendEndpointProvider;
-    private readonly IConfiguration _configuration;
+    private readonly ISendEndpointProvider _sendEndpointProvider = sendEndpointProvider;
+    private readonly IConfiguration _configuration = configuration;
+    private readonly IOrderRepository _orderRepository = orderRepository;
 
-    public OrderService(ISendEndpointProvider sendEndpointProvider, IConfiguration configuration)
-    {
-        _sendEndpointProvider = sendEndpointProvider;
-        _configuration = configuration;
-    }
+    public async Task<IEnumerable<OrderViewModel>> GetOrdersAsync()
+        => (await _orderRepository.GetOrdersAsync()).ToViewModel();
 
-    public async Task<Order> GetOrdersAsync()
-    {
-        throw new NotImplementedException();
-    }
-    public Task<bool> ExistsAsync(Guid id)
-    {
-        // Chama a respository pra sabe se existe ou não.
-        throw new NotImplementedException();
-    }
 
-    public Task<Order> GetOrderByIdAsync(Guid Id)
-    {
-        throw new NotImplementedException();
-    }
+    public async Task<bool> ExistsAsync(Guid id)
+        => await _orderRepository.ExistsAsync(id);
+
 
     public async Task UpdateOrderAsync(UpdateStatusOrderViewModel orderViewModel)
     {
         // Faz get de Order.
+        var order = await GetOrderByIdAsync(orderViewModel.Id);
 
         // Update order recebido com base no orderViewModel.
+        order.Status = orderViewModel.Status.ToDomainStatus();
+        order.CancellationReason = orderViewModel.CancellationReason;
 
         // Update na base de dados. 
+        await _orderRepository.UpdateOrderAsync(order.ToModel());
 
+        // TODO: Validar se gravou com sucesso!!
 
-        // Se gravou com sucesso, colocar a mensagem da fila do rabbitmq.z
+        // Se gravou com sucesso, colocar a mensagem da fila do rabbitmq
         await SendMessageToRabbity(orderViewModel, "MassTransit_UpdateStatusOrder:NomeFila");
     }
 
@@ -50,4 +44,7 @@ public class OrderService : IOrderService
         var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{nomeFila}"));
         await endpoint.Send(orderViewModel);
     }
+
+    public async Task<OrderViewModel?> GetOrderByIdAsync(Guid id)
+        => (await _orderRepository.GetOrderByIdAsync(id)).ToViewModel();
 }

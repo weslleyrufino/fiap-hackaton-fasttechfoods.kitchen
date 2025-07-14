@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 
 namespace FastTechFoods.Kitchen.Application.ViewModel.Order;
-public class OrderItem : ViewModelBase
+public class OrderItemViewModel : ViewModelBase
 {
     [Required(ErrorMessage = "The menu item ID is required.")]
     public Guid MenuItemId { get; set; }

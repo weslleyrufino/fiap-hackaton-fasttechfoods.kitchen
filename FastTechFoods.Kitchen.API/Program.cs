@@ -26,6 +26,7 @@ builder.Services.AddScoped<IContatoService, ContatoService>(); // TODO: DELETE
 
 builder.Services.AddScoped<IMenuItemService, MenuItemService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
 
 // Add services to the container.

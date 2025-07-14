@@ -7,15 +7,9 @@ public class ApplicationDbContext : DbContext
 {
     private readonly string _connectionString;
 
-    public ApplicationDbContext()
+    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+        : base(options)
     {
-        // Para rodar migration preciso comentar o código dentro desse construtor.
-        IConfiguration configuration = new ConfigurationBuilder()
-            .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-            .AddJsonFile("appsettings.json")
-            .Build();
-
-        _connectionString = configuration.GetConnectionString("ConnectionString");
     }
 
     public ApplicationDbContext(string connectionString)
@@ -24,10 +18,13 @@ public class ApplicationDbContext : DbContext
     }
 
     public DbSet<Contato> Contato { get; set; }
+    public DbSet<Order> Order { get; set; }
+    public DbSet<OrderItem> OrderItem { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        if (!optionsBuilder.IsConfigured)
+        // Só usa _connectionString se ele for fornecido manualmente (sem DI)
+        if (!optionsBuilder.IsConfigured && !string.IsNullOrEmpty(_connectionString))
         {
             optionsBuilder
                 .UseSqlServer(_connectionString)
