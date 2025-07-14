@@ -5,25 +5,25 @@ Este microsserviço foi desenvolvido de forma individual, utilizando os princíp
 A estrutura foi pensada para garantir baixo acoplamento, alta coesão e facilidade de manutenção.
 
 ### 🔧 Tecnologias e padrões utilizados:
-.NET 8 com C#
+- .NET 8 com C#
 
-Entity Framework Core para persistência de dados
+- Entity Framework Core para persistência de dados
 
-RabbitMQ para comunicação assíncrona entre microsserviços
+- RabbitMQ para comunicação assíncrona entre microsserviços
 
-Clean Architecture com separação de responsabilidades em:
+- Clean Architecture com separação de responsabilidades em:
 
-API: camada de entrada (Controllers, Program, Configs)
+- API: camada de entrada (Controllers, Program, Configs)
 
-Application: serviços de aplicação, view models, validações e interfaces
+- Application: serviços de aplicação, view models, validações e interfaces
 
-Domain: entidades e lógica de negócio pura
+- Domain: entidades e lógica de negócio pura
 
-Infrastructure: repositórios, configuração de banco e mensagens
+- Infrastructure: repositórios, configuração de banco e mensagens
 
-Validação com Data Annotations
+- Validação com Data Annotations
 
-Mensageria desacoplada via MassTransit + RabbitMQ
+- Mensageria desacoplada via MassTransit + RabbitMQ
 
 ### 🎯 Objetivo
 Construir um microsserviço autônomo, que possa se comunicar com outros serviços via mensagens (RabbitMQ) e seguir boas práticas de arquitetura, visando escalabilidade, testabilidade e clareza de responsabilidades.
