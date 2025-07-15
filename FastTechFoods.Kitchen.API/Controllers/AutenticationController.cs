@@ -4,6 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 namespace FastTechFoods.Kitchen.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class AutenticacaoController : ControllerBase
+public class AutenticationController : ControllerBase
 {
 }

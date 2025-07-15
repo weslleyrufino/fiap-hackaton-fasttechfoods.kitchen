@@ -5,10 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace FastTechFoods.Kitchen.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class OrdersController(IOrderService orderService, ILogger<MenuItemController> logger) : ControllerBase
+public class OrdersController(IOrderService orderService, ILogger<OrdersController> logger) : ControllerBase
 {
     private readonly IOrderService _orderService = orderService;
-    private readonly ILogger<MenuItemController> _logger = logger;
+    private readonly ILogger<OrdersController> _logger = logger;
 
     [HttpGet]
     public async Task<IActionResult> GetOrders()
@@ -35,7 +35,7 @@ public class OrdersController(IOrderService orderService, ILogger<MenuItemContro
         bool exists = await _orderService.ExistsAsync(orderViewModel.Id);
 
         if (!exists)
-            return NotFound("Order does not exist");
+            return NotFound("Order does not exist.");
 
         await _orderService.UpdateOrderAsync(orderViewModel);
 

@@ -7,6 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="Bogus" Version="35.6.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.0">
@@ -25,6 +26,10 @@
   <ItemGroup>
     <ProjectReference Include="..\FastTechFoods.Kitchen.Application\FastTechFoods.Kitchen.Application.csproj" />
     <ProjectReference Include="..\FastTechFoods.Kitchen.Domain\FastTechFoods.Kitchen.Domain.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Scripts\" />
   </ItemGroup>
 
 </Project>
