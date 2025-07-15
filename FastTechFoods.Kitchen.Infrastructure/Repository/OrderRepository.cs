@@ -5,14 +5,6 @@ using Microsoft.EntityFrameworkCore;
 namespace FastTechFoods.Kitchen.Infrastructure.Repository;
 public class OrderRepository(ApplicationDbContext context) : EFRepository<Order>(context), IOrderRepository
 {
-    public async Task<bool> ExistsAsync(Guid id)
-    {
-        return await _dbSet
-            .AsNoTracking()
-            .AnyAsync(o => o.Id == id);
-    }
-        
-
     public async Task<Order?> GetOrderByIdAsync(Guid id)
     {
         return await _dbSet
@@ -22,16 +14,11 @@ public class OrderRepository(ApplicationDbContext context) : EFRepository<Order>
     }
        
 
-    public async Task<IEnumerable<Order>> GetOrdersAsync()
+    public async Task<IEnumerable<Order>> GetAllOrdersAsync()
     {
         return await _dbSet
             .Include(o => o.Items)
             .ToListAsync();
     }
 
-    public async Task UpdateOrderAsync(Order order)
-    {
-        _dbSet.Update(order);
-        await _context.SaveChangesAsync();
-    }
 }

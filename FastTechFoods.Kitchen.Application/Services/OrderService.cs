@@ -1,4 +1,5 @@
-﻿using FastTechFoods.Kitchen.Application.ExtensionMethods;
+﻿using FastTechFoods.Kitchen.Application.Common;
+using FastTechFoods.Kitchen.Application.ExtensionMethods;
 using FastTechFoods.Kitchen.Application.Interfaces.Repository;
 using FastTechFoods.Kitchen.Application.Interfaces.Services;
 using FastTechFoods.Kitchen.Application.ViewModel.Order;
@@ -12,41 +13,38 @@ public class OrderService(ISendEndpointProvider sendEndpointProvider, IConfigura
     private readonly IConfiguration _configuration = configuration;
     private readonly IOrderRepository _orderRepository = orderRepository;
 
-    public async Task<IEnumerable<OrderViewModel>> GetOrdersAsync()
-    {
-        return (await _orderRepository.GetOrdersAsync()).ToViewModel();
-    }
+    public async Task<IEnumerable<OrderViewModel>> GetAllOrdersAsync()
+        => (await _orderRepository.GetAllOrdersAsync()).ToViewModel();
 
 
     public async Task<bool> ExistsAsync(Guid id)
-    {
-        return await _orderRepository.ExistsAsync(id);
-    }
+        => await _orderRepository.ExistsAsync(id);
 
 
     public async Task UpdateOrderAsync(UpdateStatusOrderViewModel orderViewModel)
     {
+        var order = await SetData(orderViewModel);
+
+        // Update na base de dados. 
+        await _orderRepository.UpdateAsync(order.ToModel());
+
+        // Se gravou com sucesso, colocar a mensagem da fila do rabbitmq
+        await RabbitMqHelper.SendMessageAsync(_sendEndpointProvider, _configuration, orderViewModel, "MassTransit_UpdateStatusOrder:NomeFila");
+    }
+
+    private async Task<OrderViewModel> SetData(UpdateStatusOrderViewModel orderViewModel)
+    {
         // Faz get de Order.
         var order = await GetOrderByIdAsync(orderViewModel.Id);
+
+        if (order is null)
+            throw new Exception("Order not found.");
 
         // Update order recebido com base no orderViewModel.
         order.Status = orderViewModel.Status.ToDomainStatus();
         order.CancellationReason = orderViewModel.CancellationReason;
 
-        // Update na base de dados. 
-        await _orderRepository.UpdateOrderAsync(order.ToModel());
-
-        // TODO: Validar se gravou com sucesso!!
-
-        // Se gravou com sucesso, colocar a mensagem da fila do rabbitmq
-        await SendMessageToRabbity(orderViewModel, "MassTransit_UpdateStatusOrder:NomeFila");
-    }
-
-    public async Task SendMessageToRabbity(UpdateStatusOrderViewModel orderViewModel, string configuration)// TODO: Deixar essa classe em um lugar centralizado para ser reutilizada por outras classes
-    {
-        var nomeFila = _configuration[configuration];
-        var endpoint = await _sendEndpointProvider.GetSendEndpoint(new Uri($"queue:{nomeFila}"));
-        await endpoint.Send(orderViewModel);
+        return order;
     }
 
     public async Task<OrderViewModel?> GetOrderByIdAsync(Guid id)

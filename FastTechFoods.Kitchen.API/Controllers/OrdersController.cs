@@ -18,7 +18,7 @@ public class OrdersController(IOrderService orderService, ILogger<MenuItemContro
 
         // TODO: Permissão. Todos da cozinha podem acessar.
 
-        var result = await _orderService.GetOrdersAsync();
+        var result = await _orderService.GetAllOrdersAsync();
 
         return Ok(result);
     }
