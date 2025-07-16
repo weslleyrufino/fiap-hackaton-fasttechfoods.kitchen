@@ -9,6 +9,14 @@ using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
 using System.Diagnostics;
+using FastTechFoods.Kitchen.Application.Interfaces.Services.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using FastTechFoods.Kitchen.Infrastructure.Services.Authentication;
+using Microsoft.OpenApi.Models;
+using FastTechFoods.Kitchen.API.Security;
+using Microsoft.AspNetCore.Authorization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,13 +38,51 @@ builder.Services.AddScoped<IMenuItemRepository, MenuItemRepository>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IOrderRepository, OrderRepository>();
 
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IAuthService, AuthService>();
+
+
+builder.Services.AddScoped<IJwtTokenService, JwtTokenService>();
+
+builder.Services
+       .AddSingleton<IAuthorizationMiddlewareResultHandler, CustomAuthorizationMiddlewareResultHandler>();
+
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+builder.Services.AddSwaggerGen(c =>
+{
+    // defines the “Bearer” security scheme
+    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "Insert JWT token as: Bearer {your_token}"
+    });
+
+    // makes Swagger require this scheme on all protected endpoints
+    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id   = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 
 
@@ -55,18 +101,39 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(configuration.GetConnectionString("ConnectionString"));
 }, ServiceLifetime.Scoped);
 
+
+// ************************************************ Config. Token JWT. ************************************************ 
+builder.Services
+    .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                                          Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
+
+builder.Services.AddAuthorization();
+// ************************************************ Config. Token JWT. ************************************************ 
+
 var app = builder.Build();
 
-// Registra m�tricas de uso de CPU e mem�ria
+// Registra métricas de uso de CPU e mem�ria
 var cpuUsage = Metrics.CreateGauge("system_cpu_usage_percent", "Current CPU usage percentage.");
 var memoryUsage = Metrics.CreateGauge("system_memory_usage_bytes", "Current memory usage in bytes.");
 
-// Vari�veis para c�lculo do uso de CPU
+// Vari�veis para cálculo do uso de CPU
 var lastTotalProcessorTime = TimeSpan.Zero;
 var lastTime = DateTime.UtcNow;
 
 
-// Middleware para coletar m�tricas de uso de CPU e mem�ria
+// Middleware para coletar métricas de uso de CPU e memória
 app.Use(async (context, next) =>
 {
     var process = Process.GetCurrentProcess();
@@ -80,27 +147,27 @@ app.Use(async (context, next) =>
 
     var cpuPercent = elapsedTime > 0 ? (cpuElapsedTime / elapsedTime) * 100 / Environment.ProcessorCount : 0;
 
-    // Atualiza valores para o pr�ximo c�lculo
+    // Atualiza valores para o próximo cálculo
     lastTime = currentTime;
     lastTotalProcessorTime = currentTotalProcessorTime;
 
-    // Define a m�trica de CPU
+    // Define a métrica de CPU
     cpuUsage.Set(cpuPercent);
 
-    // C�lculo do uso de mem�ria (percentual)
-    var totalMemory = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes; // Total de mem�ria dispon�vel para o processo
-    var usedMemory = process.PrivateMemorySize64; // Mem�ria usada pelo processo
+    // Cálculo do uso de memória (percentual)
+    var totalMemory = GC.GetGCMemoryInfo().TotalAvailableMemoryBytes; // Total de memória disponível para o processo
+    var usedMemory = process.PrivateMemorySize64; // Memória usada pelo processo
 
     var memoryPercent = totalMemory > 0 ? (usedMemory / (double)totalMemory) * 100 : 0;
 
-    // Define a m�trica de mem�ria
+    // Define a métrica de memória
     memoryUsage.Set(memoryPercent);
 
     await next();
 });
 
 
-// Middleware para medir lat�ncia das requisi��es
+// Middleware para medir latência das requisições
 app.Use(async (context, next) =>
 {
     var stopwatch = System.Diagnostics.Stopwatch.StartNew();
@@ -111,7 +178,7 @@ app.Use(async (context, next) =>
         .Observe(stopwatch.Elapsed.TotalSeconds);
 });
 
-// Middleware de tratamento de exce��es
+// Middleware de tratamento de exceções
 app.UseExceptionHandler(errorApp =>
 {
     errorApp.Run(async context =>
@@ -131,7 +198,7 @@ app.UseExceptionHandler(errorApp =>
     });
 });
 
-// Middleware padr�o
+// Middleware padrão
 
 // Configure the HTTP request pipeline.
 // if (app.Environment.IsDevelopment())
@@ -144,6 +211,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 //app.UseHttpsRedirection();
+app.UseAuthentication();
 
 app.UseAuthorization();
 

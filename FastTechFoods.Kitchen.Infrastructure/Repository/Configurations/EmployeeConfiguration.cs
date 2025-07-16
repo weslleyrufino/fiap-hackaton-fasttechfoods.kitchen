@@ -1,5 +1,4 @@
 ﻿using FastTechFoods.Kitchen.Domain.Entities;
-using FastTechFoods.Kitchen.Domain.Entities.Enum;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

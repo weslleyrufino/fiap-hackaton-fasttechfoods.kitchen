@@ -1,5 +1,6 @@
 ﻿using FastTechFoods.Kitchen.Application.Interfaces.Services;
 using FastTechFoods.Kitchen.Application.ViewModel.MenuItem;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoods.Kitchen.API.Controllers;
@@ -11,20 +12,18 @@ public class MenuItemController(IMenuItemService menuItemService, ILogger<MenuIt
     private readonly ILogger<MenuItemController> _logger = logger;
 
 
-    [HttpPost]
+    [HttpPost, Authorize(Roles = "Manager")]
     public async Task<IActionResult> PostCreateMenuItem([FromBody] CreateMenuItemViewModel menuItemViewModel)
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-
-        // TODO: SOMENTE GERENTE PODE ACESSAR.
 
         await _menuItemService.CreateMenuItemAsync(menuItemViewModel);
 
         return Created();
     }
 
-    [HttpPut]
+    [HttpPut, Authorize(Roles = "Manager")]
     public async Task<IActionResult> PutUpdateMenuItem([FromBody] UpdateMenuItemViewModel menuItemViewModel)
     {
 
@@ -36,8 +35,6 @@ public class MenuItemController(IMenuItemService menuItemService, ILogger<MenuIt
         if (!exists)
             return NotFound("Menu Item not found.");
 
-
-        // TODO: SOMENTE GERENTE PODE ACESSAR.
 
         await _menuItemService.UpdateMenuItemAsync(menuItemViewModel);
 
