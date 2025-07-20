@@ -1,5 +1,6 @@
 ﻿using FastTechFoods.Kitchen.Application.Common;
 using FastTechFoods.Kitchen.Application.ExtensionMethods;
+using FastTechFoods.Kitchen.Application.ExtensionMethods.Event;
 using FastTechFoods.Kitchen.Application.Interfaces.Repository;
 using FastTechFoods.Kitchen.Application.Interfaces.Services;
 using FastTechFoods.Kitchen.Application.ViewModel.MenuItem;
@@ -16,11 +17,12 @@ public class MenuItemService(ISendEndpointProvider sendEndpointProvider, IConfig
 
     public async Task CreateMenuItemAsync(CreateMenuItemViewModel createMenuItemViewModel)
     {
+        var menuItemRequest = createMenuItemViewModel.ToModel();
         // Inserir na base de dados. 
-        await _menuItemRepository.InsertAsync(createMenuItemViewModel.ToModel());
+        await _menuItemRepository.InsertAsync(menuItemRequest);
 
         // Se gravou com sucesso, colocar a mensagem da fila do rabbitmq.
-        await RabbitMqHelper.SendMessageAsync(_sendEndpointProvider, _configuration, createMenuItemViewModel, "MassTransit_CreateItemMenu:NomeFila");
+        await RabbitMqHelper.SendMessageAsync(_sendEndpointProvider, _configuration, menuItemRequest.ToEventModel(), "MassTransit_CreateItemMenu:NomeFila");
     }
 
     public async Task<bool> ExistsAsync(Guid id)

@@ -9,6 +9,7 @@ public static class MenuItemExtensions
     {
         return new MenuItem
         {
+            Id = new Guid(),
             Name = createViewModel.Name,
             Description = createViewModel.Description,
             Price = createViewModel.Price,
