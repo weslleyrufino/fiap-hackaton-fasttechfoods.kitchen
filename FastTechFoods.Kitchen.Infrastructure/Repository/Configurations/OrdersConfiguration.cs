@@ -29,6 +29,7 @@ public class OrdersConfiguration : IEntityTypeConfiguration<Order>
                .IsRequired();
 
         builder.Property(o => o.DeliveryMethod)
+                .HasConversion<string>()
                .HasColumnType("VARCHAR(20)")
                .IsRequired();
 

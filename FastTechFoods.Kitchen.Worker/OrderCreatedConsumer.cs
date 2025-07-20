@@ -16,14 +16,14 @@ public class OrderCreatedConsumer : IConsumer<OrderCreatedEvent>
     {
         var msg = context.Message;
 
-        // Mapear e persistir no banco
+        // Mapear e persistir no banco 
         var order = new Domain.Entities.Order
         {
             Id = msg.Id,
             CustomerId = msg.CustomerId,
             CreatedAt = msg.CreatedAt,
             Status = Enum.Parse<Domain.Entities.Enum.EnumStatus>(msg.Status),
-            DeliveryMethod = msg.DeliveryMethod,
+            DeliveryMethod = Enum.Parse<Domain.Entities.Enum.EnumDeliveryMethod>(msg.DeliveryMethod),
             CancellationReason = msg.CancellationReason,
             Items = msg.Items.Select(i => new Domain.Entities.OrderItem
             {

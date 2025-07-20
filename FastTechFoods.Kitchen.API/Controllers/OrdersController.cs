@@ -1,8 +1,10 @@
 ﻿using FastTechFoods.Kitchen.Application.Interfaces.Services;
 using FastTechFoods.Kitchen.Application.ViewModel.Order;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoods.Kitchen.API.Controllers;
+[Authorize]
 [Route("api/[controller]")]
 [ApiController]
 public class OrdersController(IOrderService orderService, ILogger<OrdersController> logger) : ControllerBase

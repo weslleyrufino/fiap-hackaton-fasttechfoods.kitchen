@@ -23,7 +23,7 @@ Host.CreateDefaultBuilder(args)
 
             x.UsingRabbitMq((context, cfg) =>
             {
-                var rmq = hostContext.Configuration.GetSection("MassTransit_ClientOrderCreated");
+                var rmq = hostContext.Configuration.GetSection("MassTransit_CustomerOrderCreated");
                 cfg.Host(rmq["Servidor"], h =>
                 {
                     h.Username(rmq["Usuario"]);

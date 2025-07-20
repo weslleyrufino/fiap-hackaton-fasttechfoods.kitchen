@@ -10,7 +10,7 @@ public class Order : EntityBase
 
     public required EnumStatus Status { get; set; }
 
-    public required string DeliveryMethod { get; set; }
+    public required EnumDeliveryMethod DeliveryMethod { get; set; }
 
     public string? CancellationReason { get; set; }
 

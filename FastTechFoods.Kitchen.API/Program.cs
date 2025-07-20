@@ -4,7 +4,6 @@ using FastTechFoods.Kitchen.Application.Interfaces.Services;
 using FastTechFoods.Kitchen.Application.Services;
 using FastTechFoods.Kitchen.Infrastructure.Repository;
 using FastTechFoods.Kitchen.Infrastructure.IoC;
-//using MassTransit;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.EntityFrameworkCore;
 using Prometheus;
@@ -111,6 +110,7 @@ builder.Services
         {
             ValidateIssuer = true,
             ValidateAudience = true,
+            ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],

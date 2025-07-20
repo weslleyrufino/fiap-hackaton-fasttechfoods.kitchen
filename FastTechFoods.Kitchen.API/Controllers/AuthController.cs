@@ -1,6 +1,5 @@
 ﻿using FastTechFoods.Kitchen.Application.Interfaces.Services.Authentication;
 using FastTechFoods.Kitchen.Application.ViewModel;
-using FastTechFoods.Kitchen.Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoods.Kitchen.API.Controllers;
