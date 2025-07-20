@@ -5,16 +5,12 @@ using System.ComponentModel.DataAnnotations;
 namespace FastTechFoods.Kitchen.Application.ViewModel.Order;
 public class OrderViewModel : ViewModelBase
 {
-    [Required(ErrorMessage = "The customer ID is required.")]
-    public string CustomerId { get; set; } // string pois pode ser CPF ou email.
+    public Guid CustomerId { get; set; } 
 
-    [Required(ErrorMessage = "The order date is required.")]
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-    [Required(ErrorMessage = "The order status is required.")]
     public EnumStatus Status { get; set; } // Ex: "Pending", "Accepted", "Rejected", "Canceled"
 
-    [Required(ErrorMessage = "The delivery method is required.")]
     public EnumDeliveryMethod DeliveryMethod { get; set; }
 
 

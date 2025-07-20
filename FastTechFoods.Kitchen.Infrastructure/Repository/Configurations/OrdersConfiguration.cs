@@ -16,7 +16,7 @@ public class OrdersConfiguration : IEntityTypeConfiguration<Order>
                 .HasDefaultValueSql("NEWSEQUENTIALID()");
 
         builder.Property(o => o.CustomerId)
-               .HasColumnType("VARCHAR(50)")
+               .HasColumnType("UNIQUEIDENTIFIER")
                .IsRequired();
 
         builder.Property(o => o.CreatedAt)
