@@ -1,8 +1,10 @@
-﻿using FastTechFoods.Kitchen.Infrastructure.Repository;
-using FastTechFoods.Kitchen.Worker.Messages;
+﻿using FastTechFoods.Contracts;
+using FastTechFoods.Kitchen.Domain.Entities;
+using FastTechFoods.Kitchen.Domain.Entities.Enum;
+using FastTechFoods.Kitchen.Infrastructure.Repository;
 using MassTransit;
 
-namespace FastTechFoods.Kitchen.Worker;
+namespace FastTechFoods.Kitchen.Worker.Consumers;
 public class OrderCreatedConsumer : IConsumer<OrderCreatedEvent>
 {
     private readonly ApplicationDbContext _dbContext;
@@ -17,15 +19,14 @@ public class OrderCreatedConsumer : IConsumer<OrderCreatedEvent>
         var msg = context.Message;
 
         // Mapear e persistir no banco 
-        var order = new Domain.Entities.Order
+        var order = new Order
         {
             Id = msg.Id,
             CustomerId = msg.CustomerId,
             CreatedAt = msg.CreatedAt,
-            Status = Enum.Parse<Domain.Entities.Enum.EnumStatus>(msg.Status),
-            DeliveryMethod = Enum.Parse<Domain.Entities.Enum.EnumDeliveryMethod>(msg.DeliveryMethod),
-            CancellationReason = msg.CancellationReason,
-            Items = msg.Items.Select(i => new Domain.Entities.OrderItem
+            Status = (EnumStatus)msg.Status,
+            DeliveryMethod = (EnumDeliveryMethod)msg.DeliveryMethod,
+            Items = msg.Items.Select(i => new OrderItem
             {
                 Id = i.Id,
                 MenuItemId = i.MenuItemId,
