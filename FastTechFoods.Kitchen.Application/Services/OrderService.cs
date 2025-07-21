@@ -29,7 +29,7 @@ public class OrderService(ISendEndpointProvider sendEndpointProvider, IConfigura
         await _orderRepository.UpdateAsync(order.ToModel());
 
         // Se gravou com sucesso, colocar a mensagem da fila do rabbitmq
-        await RabbitMqHelper.SendMessageAsync(_sendEndpointProvider, _configuration, orderViewModel, "MassTransit_UpdateStatusOrder:NomeFila");
+        await RabbitMqHelper.SendMessageAsync(_sendEndpointProvider, _configuration, orderViewModel.ToModelEvent(), "MassTransit_AcceptedOrRejectedOrderByKitchen:NomeFila");
     }
 
     private async Task<OrderViewModel> SetData(UpdateStatusOrderViewModel orderViewModel)
@@ -41,12 +41,12 @@ public class OrderService(ISendEndpointProvider sendEndpointProvider, IConfigura
             throw new Exception("Order not found.");
 
         // Update order recebido com base no orderViewModel.
-        order.Status = orderViewModel.Status.ToDomainStatus();
+        order.Status = orderViewModel.Status;
         order.CancellationReason = orderViewModel.CancellationReason;
 
         return order;
     }
 
     public async Task<OrderViewModel?> GetOrderByIdAsync(Guid id)
-        => (await _orderRepository.GetOrderByIdAsync(id)).ToViewModel();
+        => (await _orderRepository.GetOrderByIdAsync(id))?.ToViewModel();
 }

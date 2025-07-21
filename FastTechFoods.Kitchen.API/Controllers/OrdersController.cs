@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FastTechFoods.Kitchen.API.Controllers;
-[Authorize]
+
 [Route("api/[controller]")]
 [ApiController]
 public class OrdersController(IOrderService orderService, ILogger<OrdersController> logger) : ControllerBase
@@ -12,24 +12,22 @@ public class OrdersController(IOrderService orderService, ILogger<OrdersControll
     private readonly IOrderService _orderService = orderService;
     private readonly ILogger<OrdersController> _logger = logger;
 
-    [HttpGet]
-    public async Task<IActionResult> GetOrders()
+    [HttpGet("GetAllOrders"), Authorize(Roles = "Attendant")]
+    public async Task<IActionResult> GetAllOrdersAsync()
     {
         if (!ModelState.IsValid)
             return BadRequest(ModelState);
-
-        // TODO: Permissão. Todos da cozinha podem acessar.
 
         var result = await _orderService.GetAllOrdersAsync();
 
         return Ok(result);
     }
 
-    [HttpPatch]
-    public async Task<IActionResult> PatchUpdateStatusOrders([FromBody] UpdateStatusOrderViewModel orderViewModel)
+    // "O sistema deve permitir que a equipe da cozinha visualize os pedidos recebidos e aceite-os ou recuse-os."
+    // Deu a entender que só os atendentes da cozinha que podem acessar essa parte aqui. Pra mim não faz muito sentido o gerente não poder, mas estou deixando assim com base no que entendi do documento.
+    [HttpPatch("AcceptOrRejectOrder"), Authorize(Roles = "Attendant")]
+    public async Task<IActionResult> AcceptOrRejectOrderAsync([FromBody] UpdateStatusOrderViewModel orderViewModel)
     {
-
-        // TODO: Permissão. Todos da cozinha podem acessar.
 
         if (!ModelState.IsValid)
             return BadRequest(ModelState);

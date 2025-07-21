@@ -1,4 +1,5 @@
-﻿using FastTechFoods.Kitchen.Application.Interfaces.Repository;
+﻿using FastTechFoods.Contracts;
+using FastTechFoods.Contracts.Enum;
 using FastTechFoods.Kitchen.Application.ViewModel.Order;
 using FastTechFoods.Kitchen.Domain.Entities;
 
@@ -15,7 +16,7 @@ public static class OrderExtensions
             CancellationReason = model.CancellationReason,
             CreatedAt = model.CreatedAt,
             DeliveryMethod = model.DeliveryMethod,
-            Items = model.Items.Select(item =>  new OrderItemViewModel
+            Items = model.Items.Select(item => new OrderItemViewModel
             {
                 Id = item.Id,
                 MenuItemId = item.MenuItemId,
@@ -46,6 +47,16 @@ public static class OrderExtensions
                 UnitPrice = item.UnitPrice
             }).ToList()
         };
+    }
+
+    public static AcceptOrRejectOrder ToModelEvent(this UpdateStatusOrderViewModel viewModel)
+    {
+        return new AcceptOrRejectOrder
+            (
+                viewModel.Id,
+                (EnumStatus)viewModel.Status,
+                viewModel.CancellationReason
+            );
     }
 }
 

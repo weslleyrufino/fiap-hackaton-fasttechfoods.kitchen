@@ -18,6 +18,7 @@ public class OrderRepository(ApplicationDbContext context) : EFRepository<Order>
     {
         return await _dbSet
             .Include(o => o.Items)
+            .OrderByDescending(x => x.CreatedAt)
             .ToListAsync();
     }
 
