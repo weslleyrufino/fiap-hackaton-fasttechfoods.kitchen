@@ -23,6 +23,7 @@ Host.CreateDefaultBuilder(args)
         services.AddMassTransit(x =>
         {
             x.AddConsumer<OrderCreatedConsumer>();
+            x.AddConsumer<CancelOrderByCustomerConsumer>();
 
             x.UsingRabbitMq((context, cfg) =>
             {
@@ -38,6 +39,12 @@ Host.CreateDefaultBuilder(args)
                 {
                     e.ConfigureConsumer<OrderCreatedConsumer>(context);
                 });
+
+                var orderToCancel = configuration.GetSection("MassTransit_CancelOrderByCustomer");
+                cfg.ReceiveEndpoint(orderToCancel["NomeFila"], e =>
+                {
+                    e.ConfigureConsumer<CancelOrderByCustomerConsumer>(context);
+                });
             });
         });
 
@@ -46,41 +53,3 @@ Host.CreateDefaultBuilder(args)
     })
     .Build()
     .Run();
-
-//Host.CreateDefaultBuilder(args)
-//    .ConfigureServices((hostContext, services) =>
-//    {
-//        // Configurar DbContext
-//        services.AddDbContext<ApplicationDbContext>(options =>
-//            options.UseSqlServer(
-//                hostContext.Configuration.GetConnectionString("ConnectionString")
-//            )
-//        );
-
-//        // Configurar MassTransit + RabbitMQ
-//        services.AddMassTransit(x =>
-//        {
-//            x.AddConsumer<OrderCreatedConsumer>();
-
-//            x.UsingRabbitMq((context, cfg) =>
-//            {
-//                var rmq = hostContext.Configuration.GetSection("MassTransit_CustomerOrderCreated");
-//                cfg.Host(rmq["Servidor"], h =>
-//                {
-//                    h.Username(rmq["Usuario"]);
-//                    h.Password(rmq["Senha"]);
-//                });
-
-//                cfg.ReceiveEndpoint(rmq["NomeFila"], e =>
-//                {
-//                    e.ConfigureConsumer<OrderCreatedConsumer>(context);
-//                });
-//            });
-//        });
-//        services.AddMassTransitHostedService();
-
-//        // Registrar Consumer
-//        services.AddScoped<OrderCreatedConsumer>();
-//    })
-//    .Build()
-//    .Run();
