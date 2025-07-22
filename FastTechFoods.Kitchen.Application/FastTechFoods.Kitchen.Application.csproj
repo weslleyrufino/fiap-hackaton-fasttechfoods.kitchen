@@ -11,6 +11,7 @@
     <PackageReference Include="FastTechFoods.Contracts" Version="1.0.5" />
     <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.1" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.1.1" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
     <PackageReference Include="RabbitMQ.Client" Version="6.5.0" />
   </ItemGroup>
 
