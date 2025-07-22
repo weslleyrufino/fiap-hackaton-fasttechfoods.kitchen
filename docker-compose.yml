@@ -1,6 +1,28 @@
 version: '3.7'
 
 services:
+  kitchen-api:
+    build:
+      context: .
+      dockerfile: FastTechFoods.Kitchen.API/Dockerfile
+    container_name: kitchen-api
+    ports:
+      - "5001:80"
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+      
+  kitchen-worker:
+    build:
+      context: .
+      dockerfile: FastTechFoods.Kitchen.Worker/Dockerfile
+    container_name: kitchen-worker
+    depends_on:
+      - rabbitmq
+    networks:
+      - default
+
   prometheus:
     image: prom/prometheus
     container_name: prometheus
@@ -30,6 +52,18 @@ services:
     container_name: node-exporter
     ports:
       - "9100:9100"
+    networks:
+      - default
+      
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"       # comunicação com apps
+      - "15672:15672"     # dashboard do RabbitMQ
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
     networks:
       - default
 
