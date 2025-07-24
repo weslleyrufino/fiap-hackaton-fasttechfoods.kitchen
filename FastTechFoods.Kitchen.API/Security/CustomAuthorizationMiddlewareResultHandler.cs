@@ -16,7 +16,7 @@ public class CustomAuthorizationMiddlewareResultHandler : IAuthorizationMiddlewa
     {
         if (result.Forbidden) // usuário autenticado, mas sem permissão
         {
-            context.Response.StatusCode = StatusCodes.Status403Forbidden;
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             context.Response.ContentType = "application/json";
             await context.Response
                          .WriteAsJsonAsync(new
