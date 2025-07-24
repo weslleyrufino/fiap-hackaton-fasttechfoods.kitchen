@@ -36,7 +36,7 @@ public class MenuItemService(ISendEndpointProvider sendEndpointProvider, IConfig
         await _menuItemRepository.UpdateAsync(menuItem);
 
         // Se gravou com sucesso, colocar a mensagem da fila do rabbitmq.
-        await RabbitMqHelper.SendMessageAsync(_sendEndpointProvider, _configuration, updateMenuItemViewModel, "MassTransit_UpdateItemMenu:NomeFila");
+        await RabbitMqHelper.SendMessageAsync(_sendEndpointProvider, _configuration, menuItem.ToUpdateEventModel(), "MassTransit_UpdateItemMenu:NomeFila");
     }
 
     private async Task<MenuItem> SetData(UpdateMenuItemViewModel updateMenuItemViewModel)
